@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gestion.empleados.modelo.Empleado;
 import com.gestion.empleados.repositorio.EmpleadoRepositorio;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/empleadoscontroller/")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -32,19 +34,22 @@ public class EmpleadoControlador {
 
 	@Autowired
 	private EmpleadoRepositorio repositorioEmpleados;
-
+	
+	@Operation(summary = "ESTE METODO LO QUE HACE ES DEVOLVER UNA LISTA DE TODOS LOS EMPLEADOS EN LA BASE DE DATOS")
 	//ESTE METODO ES PARA CONSULTAR TODO LOS EMPLEADOS
 	@GetMapping("/listarempleados")
 	public List<Empleado> listarEmpleados(){
 		return this.repositorioEmpleados.findAll();
 	}
 	
+	@Operation(summary = "ESTE METODO GUARDA UN NUEVO EMPLEADO RECIBIENDO UN REQUESTBODY")
 	//ESTE METODO ES PARA GUARDAR UN NUEVO EMPLEADO
 	@PostMapping("/guardarempleado")
 	public Empleado guardarEmpleado(@RequestBody Empleado empleado) {
 		return this.repositorioEmpleados.save(empleado);
 	}
 	
+	@Operation(summary = "ESTE METODO ELIMINA A UN EMPLEADO BASANDOSE DESDE AL ID, DICHO METODO ELIMINA LA FOTO DEL EMPLEADO EN CASO DE SI TENGA GUARDADA UNA")
 	//ESTE METODO ES PARA ELIMINAR UN EMPLEADO
 	@DeleteMapping("/eliminarempleado/{id}")
 	public ResponseEntity<?> eliminarEmpleado(@PathVariable("id") Long id) throws IOException {
@@ -57,12 +62,14 @@ public class EmpleadoControlador {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@Operation(summary = "ESTE METODO RECIBE UN REQUESTBODY PARA PODER ACTUALIZAR UN EMPLEADO")
 	//ESTE METODO ES PARA ACTUALIZAR LOS EMPLEADOS
 	@PutMapping("/actualizarempleado")
 	public Empleado actualizarEmpleado(@RequestBody Empleado empleado) {
 		return this.repositorioEmpleados.save(empleado);
 	}
 	
+	@Operation(summary = "ESTE METODO RECIBE 2 PARAMETROS, EL PRIMERO ES UN MULTIPARTFILE, EL CUAL ES LA IMAGEN DEL EMPLEADO, PARA EL SEGUNDO PARAMETRO LLEGA UN STRING CON FORMATO JSON CONVERTIDO DESDE ANGULAR, PARA QUE UNA VEZ QUE ES RECIBIDO EN EL CONTROLADOR JAVA SE CONVIERTA A UN OBJETO DE LA CLASE EMPLEADO")
 	//ESTE METODO ES PARA GUARDAR LA IMAGEN DEL EMPLEADO
 	@PostMapping(value="/guardarImagen")
 	public ResponseEntity<?> guardarImagen(@RequestParam("image") MultipartFile imagen, @RequestParam("empleado")  String empleado) throws IOException {
